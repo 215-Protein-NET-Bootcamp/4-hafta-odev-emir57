@@ -4,6 +4,7 @@ using Core.Dto;
 using Core.Entity;
 using Core.Utilities.Results;
 using Pagination.Business.Abstract;
+using Pagination.Business.Constants;
 
 namespace Pagination.Business.Concrete
 {
@@ -22,36 +23,42 @@ namespace Pagination.Business.Concrete
         {
             TEntity addedEntity = Mapper.Map<TEntity>(dto);
             await Repository.AddAsync(addedEntity);
-            return new SuccessDataResult<TDto>(dto);
+            return new SuccessDataResult<TDto>(dto, BusinessMessages.SuccessAdd);
         }
 
         public async Task<IResult> DeleteAsync(int id)
         {
             TEntity deletedEntity = await Repository.GetAsync(t => t.Id == id);
             await Repository.DeleteAsync(deletedEntity);
-            return new SuccessResult();
+            return new SuccessResult(BusinessMessages.SuccessDelete);
         }
 
         public async Task<IDataResult<TDto>> GetByIdAsnc(int id)
         {
             TEntity entity = await Repository.GetAsync(t => t.Id == id);
+            if (entity == null)
+                return new ErrorDataResult<TDto>(BusinessMessages.UnSuccessGet);
             TDto returnEntity = Mapper.Map<TDto>(entity);
-            return new SuccessDataResult<TDto>(returnEntity);
+            return new SuccessDataResult<TDto>(returnEntity, BusinessMessages.SuccessGet);
         }
 
         public async Task<IDataResult<List<TDto>>> GetListAsync()
         {
             IEnumerable<TEntity> entities = await Repository.GetListAsync();
             IEnumerable<TDto> result = Mapper.Map<IEnumerable<TDto>>(entities);
-            return new SuccessDataResult<List<TDto>>(result.ToList());
+            if (result.Count() == 0)
+                return new ErrorDataResult<List<TDto>>(BusinessMessages.UnSuccessList);
+            return new SuccessDataResult<List<TDto>>(result.ToList(), BusinessMessages.SuccessList);
         }
 
         public async Task<IDataResult<TDto>> UpdateAsync(int id, TDto dto)
         {
             TEntity updatedEntity = await Repository.GetAsync(t => t.Id == id);
+            if (updatedEntity == null)
+                return new ErrorDataResult<TDto>(BusinessMessages.UnSuccessGet);
             Mapper.Map(updatedEntity, dto);
             await Repository.UpdateAsync(updatedEntity);
-            return new SuccessDataResult<TDto>(dto);
+            return new SuccessDataResult<TDto>(dto, BusinessMessages.SuccessUpdate);
         }
     }
 }
