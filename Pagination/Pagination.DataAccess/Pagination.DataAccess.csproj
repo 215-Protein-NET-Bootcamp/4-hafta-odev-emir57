@@ -11,4 +11,8 @@
     <Folder Include="Concrete\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Npgsql" Version="6.0.5" />
+  </ItemGroup>
+
 </Project>
