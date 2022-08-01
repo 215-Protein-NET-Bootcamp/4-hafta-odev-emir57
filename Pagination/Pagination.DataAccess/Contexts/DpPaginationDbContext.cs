@@ -1,10 +1,6 @@
-﻿using Npgsql;
-using System;
-using System.Collections.Generic;
+﻿using Core.Utilities.Helpers;
+using Npgsql;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Pagination.DataAccess.Contexts
 {
@@ -12,7 +8,7 @@ namespace Pagination.DataAccess.Contexts
     {
         public IDbConnection CreateConnection()
         {
-            return new NpgsqlConnection();
+            return new NpgsqlConnection(ConnectionStringHelper.GetConnectionString("PostgreSqlConnection"));
         }
     }
 }
