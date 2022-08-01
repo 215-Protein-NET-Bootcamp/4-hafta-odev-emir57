@@ -4,9 +4,10 @@ using System.Linq.Expressions;
 
 namespace Core.DataAccess.Dapper
 {
-    public class DpBaseRepository<TEntity, TDto> : IAsyncEntityRepository<TEntity, TDto>
+    public class DpBaseRepository<TEntity, TDto, TContext> : IAsyncEntityRepository<TEntity, TDto>
         where TEntity : class, IEntity, new()
         where TDto : class, IDto, new()
+        where TContext : class, IContext, new()
     {
         public Task<TEntity> AddAsync(TDto entity)
         {
