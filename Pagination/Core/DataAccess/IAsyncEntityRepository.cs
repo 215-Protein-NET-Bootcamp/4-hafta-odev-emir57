@@ -4,16 +4,15 @@ using System.Linq.Expressions;
 
 namespace Core.DataAccess
 {
-    public interface IAsyncEntityRepository<TEntity, TDto>
+    public interface IAsyncEntityRepository<TEntity>
         where TEntity : class, IEntity, new()
-        where TDto : class, IDto, new()
     {
-        Task<TEntity> AddAsync(TDto entity);
-        Task<TEntity> UpdateAsync(int id, TDto entity);
-        Task DeleteAsync(int id);
+        Task<TEntity> AddAsync(TEntity entity);
+        Task<TEntity> UpdateAsync(TEntity entity);
+        Task DeleteAsync(TEntity entity);
 
-        Task<TDto> GetAsync(Expression<Func<TDto, bool>> predicate);
-        Task<IEnumerable<TDto>> GetListAsync();
-        Task<IEnumerable<TDto>> GetListAsync(Expression<Func<TDto, bool>> predicate);
+        Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> predicate);
+        Task<IEnumerable<TEntity>> GetListAsync();
+        Task<IEnumerable<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate);
     }
 }

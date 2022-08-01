@@ -1,42 +1,90 @@
-﻿using Core.Dto;
-using Core.Entity;
+﻿using Core.Entity;
+using Dapper;
+using System.Data;
 using System.Linq.Expressions;
+using WriteParameter;
 
 namespace Core.DataAccess.Dapper
 {
-    public class DpBaseRepository<TEntity, TDto, TContext> : IAsyncEntityRepository<TEntity, TDto>
+    public class DpBaseRepository<TEntity, TContext> : IAsyncEntityRepository<TEntity>
         where TEntity : class, IEntity, new()
-        where TDto : class, IDto, new()
         where TContext : class, IContext, new()
     {
-        public Task<TEntity> AddAsync(TDto entity)
+        public async Task<TEntity> AddAsync(TEntity entity)
         {
-            throw new NotImplementedException();
+            using (var conn = new TContext().CreateConnection())
+            {
+                string query = new NpgQueryGenerate<TEntity>()
+                    .GenerateInsertQuery();
+                if (conn.State != ConnectionState.Open)
+                    conn.Open();
+                await conn.ExecuteAsync(query, entity);
+                return entity;
+            }
         }
 
-        public Task DeleteAsync(int id)
+        public async Task DeleteAsync(TEntity entity)
         {
-            throw new NotImplementedException();
+            using (var conn = new TContext().CreateConnection())
+            {
+                string query = new NpgQueryGenerate<TEntity>()
+                    .GenerateDeleteQuery();
+                if (conn.State != ConnectionState.Open)
+                    conn.Open();
+                await conn.ExecuteAsync(query, entity);
+            }
         }
 
-        public Task<TDto> GetAsync(Expression<Func<TDto, bool>> predicate)
+        public async Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> predicate)
         {
-            throw new NotImplementedException();
+            using (var conn = new TContext().CreateConnection())
+            {
+                string query = new NpgQueryGenerate<TEntity>()
+                    .GenerateGetAllQuery();
+                if (conn.State != ConnectionState.Open)
+                    conn.Open();
+                var result = await conn.QueryAsync<TEntity>(query);
+                return result.AsQueryable().SingleOrDefault(predicate);
+            }
         }
 
-        public Task<IEnumerable<TDto>> GetListAsync()
+        public async Task<IEnumerable<TEntity>> GetListAsync()
         {
-            throw new NotImplementedException();
+            using (var conn = new TContext().CreateConnection())
+            {
+                string query = new NpgQueryGenerate<TEntity>()
+                    .GenerateGetAllQuery();
+                if (conn.State != ConnectionState.Open)
+                    conn.Open();
+                var result = await conn.QueryAsync<TEntity>(query);
+                return result;
+            }
         }
 
-        public Task<IEnumerable<TDto>> GetListAsync(Expression<Func<TDto, bool>> predicate)
+        public async Task<IEnumerable<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate)
         {
-            throw new NotImplementedException();
+            using (var conn = new TContext().CreateConnection())
+            {
+                string query = new NpgQueryGenerate<TEntity>()
+                    .GenerateGetAllQuery();
+                if (conn.State != ConnectionState.Open)
+                    conn.Open();
+                var result = await conn.QueryAsync<TEntity>(query);
+                return result.AsQueryable().Where(predicate);
+            }
         }
 
-        public Task<TEntity> UpdateAsync(int id, TDto entity)
+        public async Task<TEntity> UpdateAsync(TEntity entity)
         {
-            throw new NotImplementedException();
+            using (var conn = new TContext().CreateConnection())
+            {
+                string query = new NpgQueryGenerate<TEntity>()
+                    .GenerateUpdateQuery();
+                if (conn.State != ConnectionState.Open)
+                    conn.Open();
+                await conn.ExecuteAsync(query, entity);
+                return entity;
+            }
         }
     }
 }
