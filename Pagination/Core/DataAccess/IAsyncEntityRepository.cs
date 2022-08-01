@@ -1,22 +1,19 @@
-﻿using Core.Entity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Core.Dto;
+using Core.Entity;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Core.DataAccess
 {
-    public interface IAsyncEntityRepository<TEntity>
+    public interface IAsyncEntityRepository<TEntity, TDto>
         where TEntity : class, IEntity, new()
+        where TDto : class, IDto, new()
     {
-        Task<TEntity> AddAsync(TEntity entity);
-        Task<TEntity> UpdateAsync(TEntity entity);
-        Task DeleteAsync(TEntity entity);
+        Task<TEntity> AddAsync(TDto entity);
+        Task<TEntity> UpdateAsync(int id, TDto entity);
+        Task DeleteAsync(int id);
 
-        Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> predicate);
-        Task<IEnumerable<TEntity>> GetListAsync();
-        Task<IEnumerable<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate);
+        Task<TDto> GetAsync(Expression<Func<TDto, bool>> predicate);
+        Task<IEnumerable<TDto>> GetListAsync();
+        Task<IEnumerable<TDto>> GetListAsync(Expression<Func<TDto, bool>> predicate);
     }
 }
