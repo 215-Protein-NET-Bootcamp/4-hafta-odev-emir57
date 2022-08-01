@@ -16,4 +16,9 @@
     <PackageReference Include="AutoMapper" Version="11.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Pagination.Dto\Pagination.Dto.csproj" />
+    <ProjectReference Include="..\Pagination.Entity\Pagination.Entity.csproj" />
+  </ItemGroup>
+
 </Project>
