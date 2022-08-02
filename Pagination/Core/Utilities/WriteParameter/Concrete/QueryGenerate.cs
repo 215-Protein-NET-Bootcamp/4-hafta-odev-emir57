@@ -127,7 +127,7 @@ namespace WriteParameter
     {
         protected virtual string updateWriteParameters(string? previousName = "", string? lastName = "")
         {
-            var properties = _properties.Count == 0 ? typeof(TEntity).GetProperties().ToList() : _properties;
+            List<PropertyInfo> properties = getProperties();
             string idPropertyName = getIdColumn().Replace("\"", "");
 
             string updateQuery = String.Join(",", properties.Select(p => p.Name == idPropertyName ? "" : $"{previousName}{p.Name}{lastName}=@{p.Name}"));
@@ -145,7 +145,7 @@ namespace WriteParameter
 
         protected virtual string getParametersWithoutId(string? previousName = "", string? lastName = "")
         {
-            var properties = _properties.Count == 0 ? typeof(TEntity).GetProperties().ToList() : _properties;
+            List<PropertyInfo> properties = getProperties();
             string idPropertyName = getIdColumn();
             string parameters = String.Join(",", properties.Select(p => $"{previousName}{p.Name}{lastName}" == idPropertyName ? "" : $"{previousName}{p.Name}{lastName}"));
             parameters = parameters.StartsWith(",") ? parameters.Substring(1) : parameters;
@@ -153,7 +153,7 @@ namespace WriteParameter
         }
         protected virtual string getValueParametersWithoutId()
         {
-            var properties = _properties.Count == 0 ? typeof(TEntity).GetProperties().ToList() : _properties;
+            List<PropertyInfo> properties = getProperties();
             string idPropertyName = getIdColumn();
             string parameters = String.Join(",", properties.Select(p => p.Name == idPropertyName ? "" : $"@{p.Name}"));
             parameters = parameters.StartsWith(",") ? parameters.Substring(1) : parameters;
@@ -161,10 +161,28 @@ namespace WriteParameter
         }
         protected virtual string getParametersWithId(string? previousName = "", string? lastName = "")
         {
-            var properties = _properties.Count == 0 ? typeof(TEntity).GetProperties().ToList() : _properties;
+            List<PropertyInfo> properties = getProperties();
             string parameters = String.Join(",", properties.Select(p => $"{previousName}{p.Name}{lastName}"));
             parameters = parameters.StartsWith(",") ? parameters.Substring(1) : parameters;
             return parameters;
+        }
+
+        private List<PropertyInfo> getProperties()
+        {
+            List<PropertyInfo> returnProperties = new List<PropertyInfo>();
+            List<PropertyInfo> properties = _properties.Count == 0 ? typeof(TEntity).GetProperties().ToList() : _properties;
+            foreach (PropertyInfo property in properties)
+            {
+                Attribute ignoreColumnAttribute = property.GetCustomAttribute(typeof(IgnoreColumnAttribute));
+                Attribute idColumnAttribute = property.GetCustomAttribute(typeof(IdColumnAttribute));
+
+                if (ignoreColumnAttribute != null && idColumnAttribute != null)
+                    throw new CannotBeUseSameTimeIdColumnAndIgnoreColumnException();
+
+                if (ignoreColumnAttribute == null)
+                    returnProperties.Add(property);
+            }
+            return returnProperties;
         }
     }
 
