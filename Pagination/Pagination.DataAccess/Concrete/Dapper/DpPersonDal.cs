@@ -7,5 +7,8 @@ namespace Pagination.DataAccess.Concrete.Dapper
 {
     public class DpPersonDal : DpBaseRepository<Person, DpPaginationDbContext>, IPersonDal
     {
+        public DpPersonDal() : base("dbo", "Person")
+        {
+        }
     }
 }
