@@ -239,8 +239,12 @@ namespace WriteParameter
             _properties = properties.ToList();
         }
 
-        public virtual string GenerateGetAllQuery()
+        public virtual string GenerateGetAllQuery(int? limit = 0, int? offset = 0)
         {
+            if (limit != 0)
+                _limit = (int)limit;
+            if (offset != 0)
+                _offset = (int)offset;
             return getAllQuery();
         }
 
@@ -286,7 +290,8 @@ namespace WriteParameter
             checkTable();
             checkSchema();
             string parameters = getParametersWithId();
-            string query = String.Format(_cultureInfo, $"select {parameters} from {_schema}.{_tableName} {orderBy} LIMIT {_limit} OFFSET {_offset}");
+            string pagination = _limit != 0 ? $"LIMIT {_limit} OFFSET {_offset}" : "";
+            string query = String.Format(_cultureInfo, $"select {parameters} from {_schema}.{_tableName} {orderBy} {pagination}");
             return query;
         }
 

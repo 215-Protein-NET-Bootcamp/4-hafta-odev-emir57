@@ -13,9 +13,11 @@ namespace Pagination.Business.Concrete
     public class PersonManager : AsyncBaseManager<Person, PersonDto>, IPersonService
     {
         private readonly ICacheManager _cacheManager;
+        private readonly IPersonDal _personDal;
         public PersonManager(IPersonDal repository, IMapper mapper, ICacheManager cacheManager) : base(repository, mapper)
         {
             _cacheManager = cacheManager;
+            _personDal = repository;
         }
 
         public async Task<PaginatedResult<IEnumerable<PersonDto>>> GetPaginationAsync(PaginationFilter paginationFilter)
@@ -26,8 +28,8 @@ namespace Pagination.Business.Concrete
                 IEnumerable<PersonDto> cachePersons = _cacheManager.Get<IEnumerable<PersonDto>>(cacheKey);
                 return PaginationHelper.CreatePaginatedResponse(Mapper.Map<IEnumerable<PersonDto>>(cachePersons), paginationFilter, cachePersons.Count(), skip: false);
             }
-            IEnumerable<Person> persons = await Repository.GetListAsync();
-            var result = PaginationHelper.CreatePaginatedResponse(Mapper.Map<IEnumerable<PersonDto>>(persons), paginationFilter, persons.Count());
+            IEnumerable<Person> persons = await _personDal.GetListAsync(paginationFilter.PageSize, (paginationFilter.PageNumber == 1 ? 0 : paginationFilter.PageNumber) * paginationFilter.PageSize);
+            var result = PaginationHelper.CreatePaginatedResponse(Mapper.Map<IEnumerable<PersonDto>>(persons), paginationFilter, persons.Count(), skip: false);
             _cacheManager.Add(cacheKey, result.Data, 10);
             return result;
         }
