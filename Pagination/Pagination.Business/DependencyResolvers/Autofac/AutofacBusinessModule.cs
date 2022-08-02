@@ -1,4 +1,6 @@
 ﻿using Autofac;
+using Core.CrossCuttingConcerns.Caching;
+using Core.CrossCuttingConcerns.Caching.Redis;
 using Pagination.Business.Abstract;
 using Pagination.Business.Concrete;
 using Pagination.DataAccess.Abstract;
@@ -16,6 +18,10 @@ namespace Pagination.Business.DependencyResolvers.Autofac
 
             #region DataAccess
             builder.RegisterType<DpPersonDal>().As<IPersonDal>();
+            #endregion
+
+            #region Cache
+            builder.RegisterType<RedisCacheManager>().As<ICacheManager>();
             #endregion
         }
     }
