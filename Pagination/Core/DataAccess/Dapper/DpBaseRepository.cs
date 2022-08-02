@@ -10,11 +10,19 @@ namespace Core.DataAccess.Dapper
         where TEntity : class, IEntity, new()
         where TContext : class, IContext, new()
     {
+        private readonly string _schema;
+        private readonly string _tableName;
+        public DpBaseRepository(string schema, string tableName)
+        {
+            _schema = schema;
+            _tableName = tableName;
+        }
         public async Task<TEntity> AddAsync(TEntity entity)
         {
             using (var conn = new TContext().CreateConnection())
             {
                 string query = new NpgQueryGenerate<TEntity>()
+                    .SelectSchema(_schema).SelectTable(_tableName)
                     .GenerateInsertQuery();
                 if (conn.State != ConnectionState.Open)
                     conn.Open();
@@ -28,6 +36,7 @@ namespace Core.DataAccess.Dapper
             using (var conn = new TContext().CreateConnection())
             {
                 string query = new NpgQueryGenerate<TEntity>()
+                    .SelectSchema(_schema).SelectTable(_tableName)
                     .GenerateDeleteQuery();
                 if (conn.State != ConnectionState.Open)
                     conn.Open();
@@ -40,6 +49,7 @@ namespace Core.DataAccess.Dapper
             using (var conn = new TContext().CreateConnection())
             {
                 string query = new NpgQueryGenerate<TEntity>()
+                    .SelectSchema(_schema).SelectTable(_tableName)
                     .GenerateGetAllQuery();
                 if (conn.State != ConnectionState.Open)
                     conn.Open();
@@ -53,6 +63,7 @@ namespace Core.DataAccess.Dapper
             using (var conn = new TContext().CreateConnection())
             {
                 string query = new NpgQueryGenerate<TEntity>()
+                    .SelectSchema(_schema).SelectTable(_tableName)
                     .GenerateGetAllQuery();
                 if (conn.State != ConnectionState.Open)
                     conn.Open();
@@ -66,6 +77,7 @@ namespace Core.DataAccess.Dapper
             using (var conn = new TContext().CreateConnection())
             {
                 string query = new NpgQueryGenerate<TEntity>()
+                    .SelectSchema(_schema).SelectTable(_tableName)
                     .GenerateGetAllQuery();
                 if (conn.State != ConnectionState.Open)
                     conn.Open();
@@ -79,6 +91,7 @@ namespace Core.DataAccess.Dapper
             using (var conn = new TContext().CreateConnection())
             {
                 string query = new NpgQueryGenerate<TEntity>()
+                    .SelectSchema(_schema).SelectTable(_tableName)
                     .GenerateUpdateQuery();
                 if (conn.State != ConnectionState.Open)
                     conn.Open();
