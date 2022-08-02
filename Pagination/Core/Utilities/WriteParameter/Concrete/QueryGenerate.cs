@@ -8,6 +8,25 @@ using WriteParameter.Exceptions;
 namespace WriteParameter
 {
     /// <summary>
+    /// Limit and Offset
+    /// </summary>
+    /// <typeparam name="TEntity"></typeparam>
+    public partial class QueryGenerate<TEntity> : IGenerate<TEntity>
+        where TEntity : class
+    {
+        public IGenerate<TEntity> SetLimit(int limit)
+        {
+            _limit = limit;
+            return this;
+        }
+
+        public IGenerate<TEntity> SetOffset(int offset)
+        {
+            _offset = offset;
+            return this;
+        }
+    }
+    /// <summary>
     /// Select Id Columns
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
@@ -199,6 +218,8 @@ namespace WriteParameter
         protected PropertyInfo _idColumn;
         protected string _orderBy;
         protected CultureInfo _cultureInfo;
+        protected int _limit;
+        protected int _offset;
 
         public QueryGenerate()
         {
@@ -265,7 +286,7 @@ namespace WriteParameter
             checkTable();
             checkSchema();
             string parameters = getParametersWithId();
-            string query = String.Format(_cultureInfo, $"select {parameters} from {_schema}.{_tableName} {orderBy}");
+            string query = String.Format(_cultureInfo, $"select {parameters} from {_schema}.{_tableName} {orderBy} LIMIT {_limit} OFFSET {_offset}");
             return query;
         }
 
