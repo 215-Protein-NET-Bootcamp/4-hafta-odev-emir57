@@ -13,18 +13,30 @@ namespace Pagination.WebApi.Controllers
         {
         }
 
+        /// <summary>
+        /// Add 1000 rows
+        /// </summary>
+        /// <returns></returns>
+        [NonAction]
         [HttpGet]
         public async Task<IActionResult> TestAdd()
         {
-            return await base.AddAsync(new PersonDto
+            for (int i = 0; i < 1000; i++)
             {
-                FirstName = "Emir",
-                LastName = "Gürbüz",
-                Email = "emir@hotmail.com",
-                Description = "lorem",
-                Phone = "000",
-                DateOfBirth = new DateTime(2002, 9, 8)
-            });
+                await base.AddAsync(new PersonDto
+                {
+                    FirstName = $"Emir{i}",
+                    LastName = $"Gürbüz{i}",
+                    Email = $"emir{i}@hotmail.com",
+                    Description = "lorem",
+                    Phone = "000",
+                    DateOfBirth = new DateTime(2002, 9, 8)
+                });
+            }
+            return Ok();
         }
+
+
+
     }
 }
