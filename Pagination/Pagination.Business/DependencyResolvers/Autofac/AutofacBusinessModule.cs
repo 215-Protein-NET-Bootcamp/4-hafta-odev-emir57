@@ -1,4 +1,8 @@
 ﻿using Autofac;
+using Pagination.Business.Abstract;
+using Pagination.Business.Concrete;
+using Pagination.DataAccess.Abstract;
+using Pagination.DataAccess.Concrete.Dapper;
 
 namespace Pagination.Business.DependencyResolvers.Autofac
 {
@@ -6,7 +10,13 @@ namespace Pagination.Business.DependencyResolvers.Autofac
     {
         protected override void Load(ContainerBuilder builder)
         {
-            base.Load(builder);
+            #region Business
+            builder.RegisterType<PersonManager>().As<IPersonService>();
+            #endregion
+
+            #region DataAccess
+            builder.RegisterType<DpPersonDal>().As<IPersonDal>();
+            #endregion
         }
     }
 }
