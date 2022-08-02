@@ -11,7 +11,7 @@ namespace Pagination.Business.Abstract
         Task<IDataResult<TDto>> AddAsync(TDto dto);
         Task<IDataResult<TDto>> UpdateAsync(int id, TDto dto);
         Task<IResult> DeleteAsync(int id);
-        Task<IDataResult<TDto>> GetByIdAsnc(int id);
+        Task<IDataResult<TDto>> GetByIdAsync(int id);
         Task<IDataResult<List<TDto>>> GetListAsync();
     }
 }

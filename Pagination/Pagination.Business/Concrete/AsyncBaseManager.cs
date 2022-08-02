@@ -33,7 +33,7 @@ namespace Pagination.Business.Concrete
             return new SuccessResult(BusinessMessages.SuccessDelete);
         }
 
-        public async Task<IDataResult<TDto>> GetByIdAsnc(int id)
+        public async Task<IDataResult<TDto>> GetByIdAsync(int id)
         {
             TEntity entity = await Repository.GetAsync(t => t.Id == id);
             if (entity == null)
