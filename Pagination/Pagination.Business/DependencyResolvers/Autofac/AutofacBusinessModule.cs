@@ -5,6 +5,8 @@ using Pagination.Business.Abstract;
 using Pagination.Business.Concrete;
 using Pagination.DataAccess.Abstract;
 using Pagination.DataAccess.Concrete.Dapper;
+using Autofac.Extras.DynamicProxy;
+using Core.Utilities.WriteParameter.Interceptor;
 
 namespace Pagination.Business.DependencyResolvers.Autofac
 {
@@ -12,6 +14,13 @@ namespace Pagination.Business.DependencyResolvers.Autofac
     {
         protected override void Load(ContainerBuilder builder)
         {
+            var assembly = System.Reflection.Assembly.GetExecutingAssembly();
+            builder.RegisterAssemblyTypes(assembly).AsImplementedInterfaces()
+                .EnableInterfaceInterceptors(new Castle.DynamicProxy.ProxyGenerationOptions
+                {
+                    Selector = new AspectInterceptorSelector()
+                });
+
             #region Business
             builder.RegisterType<PersonManager>().As<IPersonService>();
             #endregion
