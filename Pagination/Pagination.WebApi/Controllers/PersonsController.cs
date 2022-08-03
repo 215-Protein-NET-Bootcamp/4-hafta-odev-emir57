@@ -46,6 +46,7 @@ namespace Pagination.WebApi.Controllers
             return Ok(result);
         }
 
+        [NonAction]
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] PersonDto personDto)
         {
