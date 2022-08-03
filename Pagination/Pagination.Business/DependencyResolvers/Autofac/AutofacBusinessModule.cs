@@ -1,12 +1,12 @@
 ﻿using Autofac;
+using Autofac.Extras.DynamicProxy;
 using Core.CrossCuttingConcerns.Caching;
 using Core.CrossCuttingConcerns.Caching.Redis;
+using Core.Utilities.Interceptor;
 using Pagination.Business.Abstract;
 using Pagination.Business.Concrete;
 using Pagination.DataAccess.Abstract;
 using Pagination.DataAccess.Concrete.Dapper;
-using Autofac.Extras.DynamicProxy;
-using Core.Utilities.WriteParameter.Interceptor;
 
 namespace Pagination.Business.DependencyResolvers.Autofac
 {

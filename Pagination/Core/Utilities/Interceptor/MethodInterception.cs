@@ -1,6 +1,6 @@
 ﻿using Castle.DynamicProxy;
 
-namespace Core.Utilities.WriteParameter.Interceptor
+namespace Core.Utilities.Interceptor
 {
     public class MethodInterception : MethodInterceptionBaseAttribute
     {

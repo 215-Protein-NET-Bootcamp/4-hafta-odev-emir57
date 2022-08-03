@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Core.CrossCuttingConcerns.Logging.Serilog.ConfigurationModels;
 using Serilog;
+using Core.Exceptions;
 
 namespace Core.CrossCuttingConcerns.Logging.Serilog.Loggers
 {
@@ -19,7 +20,7 @@ namespace Core.CrossCuttingConcerns.Logging.Serilog.Loggers
 
             var logConfig = configuration.GetSection("SeriLogConfigurations:FileLogConfiguration")
                 .Get<FileLogConfiguration>() ??
-                throw new Exception();
+                throw new SerilogNotFoundFolderPathException();
 
 
             var logFilePath = string.Format("{0}{1}", Directory.GetCurrentDirectory() + logConfig.FolderPath, "log.txt");
