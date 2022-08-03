@@ -1,9 +1,9 @@
 ﻿using FluentValidation;
-using Pagination.Entity.Concrete;
+using Pagination.Dto.Concrete;
 
 namespace Pagination.Business.Validators.FluentValidation
 {
-    public class PersonValidator : AbstractValidator<Person>
+    public class PersonValidator : AbstractValidator<PersonDto>
     {
         public PersonValidator()
         {

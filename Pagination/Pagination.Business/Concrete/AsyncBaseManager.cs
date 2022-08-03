@@ -19,7 +19,7 @@ namespace Pagination.Business.Concrete
             Repository = repository;
             Mapper = mapper;
         }
-        public async Task<IDataResult<TDto>> AddAsync(TDto dto)
+        public virtual async Task<IDataResult<TDto>> AddAsync(TDto dto)
         {
             TEntity addedEntity = Mapper.Map<TEntity>(dto);
             await Repository.AddAsync(addedEntity);
@@ -51,7 +51,7 @@ namespace Pagination.Business.Concrete
             return new SuccessDataResult<List<TDto>>(result.ToList(), BusinessMessages.SuccessList);
         }
 
-        public async Task<IDataResult<TDto>> UpdateAsync(int id, TDto dto)
+        public virtual async Task<IDataResult<TDto>> UpdateAsync(int id, TDto dto)
         {
             TEntity updatedEntity = await Repository.GetAsync(t => t.Id == id);
             if (updatedEntity == null)

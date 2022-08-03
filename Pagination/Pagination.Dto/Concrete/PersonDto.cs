@@ -10,6 +10,6 @@ namespace Pagination.Dto.Concrete
         public string? Description { get; set; }
         public string? Phone { get; set; }
         public DateTime DateOfBirth { get; set; }
-        public string FullName { get; }
+        public string? FullName { get; }
     }
 }

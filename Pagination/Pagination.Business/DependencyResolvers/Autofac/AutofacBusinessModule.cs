@@ -14,12 +14,7 @@ namespace Pagination.Business.DependencyResolvers.Autofac
     {
         protected override void Load(ContainerBuilder builder)
         {
-            var assembly = System.Reflection.Assembly.GetExecutingAssembly();
-            builder.RegisterAssemblyTypes(assembly).AsImplementedInterfaces()
-                .EnableInterfaceInterceptors(new Castle.DynamicProxy.ProxyGenerationOptions
-                {
-                    Selector = new AspectInterceptorSelector()
-                });
+            
 
             #region Business
             builder.RegisterType<PersonManager>().As<IPersonService>();
@@ -32,6 +27,13 @@ namespace Pagination.Business.DependencyResolvers.Autofac
             #region Cache
             builder.RegisterType<RedisCacheManager>().As<ICacheManager>();
             #endregion
+
+            var assembly = System.Reflection.Assembly.GetExecutingAssembly();
+            builder.RegisterAssemblyTypes(assembly).AsImplementedInterfaces()
+                .EnableInterfaceInterceptors(new Castle.DynamicProxy.ProxyGenerationOptions
+                {
+                    Selector = new AspectInterceptorSelector()
+                });
         }
     }
 }

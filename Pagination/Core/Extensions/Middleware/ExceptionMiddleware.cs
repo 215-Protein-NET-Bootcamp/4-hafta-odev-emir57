@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using Core.Utilities.Results;
+using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using System;
@@ -26,7 +27,6 @@ namespace Core.Extensions.Middleware
             catch (Exception e)
             {
                 await HandleAsync(context, e);
-                throw;
             }
         }
 
@@ -41,7 +41,8 @@ namespace Core.Extensions.Middleware
                 var errors = ((ValidationException)e).Errors;
                 message = String.Join("\n", errors.Select(x => x.ErrorMessage));
             }
-            await context.Response.WriteAsync(JsonConvert.SerializeObject(message));
+            var result = new ErrorResult(message);
+            await context.Response.WriteAsync(JsonConvert.SerializeObject(result));
         }
     }
 }

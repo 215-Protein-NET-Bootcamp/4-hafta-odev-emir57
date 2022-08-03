@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
+using Core.Aspect.Autofac.Validation;
 using Core.CrossCuttingConcerns.Caching;
 using Core.Entity.Concrete;
 using Core.Utilities.Results;
 using Pagination.Business.Abstract;
 using Pagination.Business.Helpers;
+using Pagination.Business.Validators.FluentValidation;
 using Pagination.DataAccess.Abstract;
 using Pagination.Dto.Concrete;
 using Pagination.Entity.Concrete;
@@ -33,5 +35,16 @@ namespace Pagination.Business.Concrete
             _cacheManager.Add(cacheKey, result.Data, 10);
             return result;
         }
+        [ValidationAspect(typeof(PersonValidator))]
+        public override Task<IDataResult<PersonDto>> AddAsync(PersonDto dto)
+        {
+            return base.AddAsync(dto);
+        }
+        [ValidationAspect(typeof(PersonValidator))]
+        public override Task<IDataResult<PersonDto>> UpdateAsync(int id, PersonDto dto)
+        {
+            return base.UpdateAsync(id, dto);
+        }
+
     }
 }
