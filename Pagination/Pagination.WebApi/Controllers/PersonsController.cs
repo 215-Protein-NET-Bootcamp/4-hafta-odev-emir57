@@ -23,7 +23,7 @@ namespace Pagination.WebApi.Controllers
         /// <returns></returns>
         [NonAction]
         [HttpGet]
-        public async Task<IActionResult> TestAdd()
+        public async Task<IActionResult> Add_1000_rows()
         {
             for (int i = 0; i < 1000; i++)
             {
