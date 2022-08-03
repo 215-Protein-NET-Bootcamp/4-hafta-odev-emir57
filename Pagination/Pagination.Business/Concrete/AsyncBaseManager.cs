@@ -1,10 +1,8 @@
 ﻿using AutoMapper;
-using Core.Aspect.Autofac.Validation;
 using Core.DataAccess;
 using Core.Dto;
 using Core.Entity;
 using Core.Utilities.Results;
-using FluentValidation;
 using Pagination.Business.Abstract;
 using Pagination.Business.Constants;
 

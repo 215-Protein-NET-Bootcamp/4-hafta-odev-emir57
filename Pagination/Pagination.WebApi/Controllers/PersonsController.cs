@@ -2,7 +2,6 @@
 using Core.Entity.Concrete;
 using Microsoft.AspNetCore.Mvc;
 using Pagination.Business.Abstract;
-using Pagination.Business.Validators.FluentValidation;
 using Pagination.Dto.Concrete;
 using Pagination.Entity.Concrete;
 
