@@ -1,5 +1,7 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using Core.DependencyResolvers;
+using Core.Extensions;
 using Core.Extensions.Middleware;
 using Pagination.Business.DependencyResolvers.Autofac;
 
@@ -22,6 +24,11 @@ builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory())
     {
         builder.RegisterModule(new AutofacBusinessModule());
     });
+#endregion
+
+#region Register core modules
+builder.Services.AddDependencyResolvers(
+    new CoreModule());
 #endregion
 
 var app = builder.Build();
