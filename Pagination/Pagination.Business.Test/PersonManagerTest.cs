@@ -31,10 +31,29 @@ namespace Pagination.Business.Test
         }
         [Theory]
         [InlineData(10, 1)]
-        public async Task Pagination_return_10_rows(int pageSize, int pageNumber)
+        public async Task Pagination_return_10_rows_is_add_false(int pageSize, int pageNumber)
         {
             _personDalMock.Setup(x => x.GetListAsync(It.IsAny<int>(), It.IsAny<int>())).ReturnsAsync((int limit, int offset) => getPersons(pageSize, pageNumber));
             _cacheManager.Setup(x => x.IsAdd("patika")).Returns(false);
+
+            PersonManager personManager = new PersonManager(_personDalMock.Object, _mapper, _cacheManager.Object);
+            PaginationFilter paginationFilter = new PaginationFilter
+            {
+                CacheKey = "patika",
+                PageNumber = pageNumber,
+                PageSize = pageSize
+            };
+
+            var personsResult = await personManager.GetPaginationAsync(paginationFilter);
+
+            Assert.Equal(personsResult.Data.Count(), 10);
+        }
+        [Theory]
+        [InlineData(10, 1)]
+        public async Task Pagination_return_10_rows_is_add_true(int pageSize, int pageNumber)
+        {
+            _personDalMock.Setup(x => x.GetListAsync(It.IsAny<int>(), It.IsAny<int>())).ReturnsAsync((int limit, int offset) => getPersons(pageSize, pageNumber));
+            _cacheManager.Setup(x => x.IsAdd("patika")).Returns(true);
 
             PersonManager personManager = new PersonManager(_personDalMock.Object, _mapper, _cacheManager.Object);
             PaginationFilter paginationFilter = new PaginationFilter
